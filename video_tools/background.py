@@ -67,7 +67,7 @@ class BackgroundSubtractor(ABC):
         self.initialized = False
         self.polarity = polarity
         try:
-            self.background_algortihm = self.background_method[method]
+            self.background_algorithm = self.background_method[method]
         except KeyError:
             raise ValueError(f"Valid methods are {', '.join(self.background_method.keys())}")
         
@@ -159,6 +159,7 @@ class BackroundImage(BackgroundSubtractor):
             raise ValueError(f'{self.image_file_name} image type unknown')
         
         self.background = im2single(im2gray(image))     
+        self.image_single = np.zeros_like(self.background)
         self.initialized = True
     
     def get_background_image(self) -> Optional[NDArray]:
@@ -168,9 +169,11 @@ class BackroundImage(BackgroundSubtractor):
             return None
 
     def subtract_background(self, image: NDArray) -> NDArray:
-        image_single = im2single(im2gray(image))
-        image_sub = np.maximum(0, self.polarity.value*(image_single - self.background))
-        return image_sub
+        im2single(im2gray(image), out=self.image_single)
+        np.subtract(self.image_single, self.background, out=self.image_single)
+        np.multiply(self.image_single, self.polarity.value, out=self.image_single) 
+        np.maximum(self.image_single, 0, out=self.image_single)
+        return self.image_single
 
 class InpaintBackground(BackgroundSubtractor):
     
@@ -266,7 +269,7 @@ class StaticBackground(BackgroundSubtractor):
         Output:
             background: m x n numpy.float32 array
         """
-        self.background = self.background_algortihm(frame_collection)
+        self.background = self.background_algorithm(frame_collection)
 
     def initialize(self):
         print('Static background')
@@ -364,7 +367,7 @@ class StaticBackgroundChunked(BackgroundSubtractor):
         Output:
             background: m x n numpy.float32 array
         """
-        return self.background_algortihm(frame_collection)
+        return self.background_algorithm(frame_collection)
 
     def get_background_image(self) -> Optional[NDArray]:
 
@@ -405,7 +408,7 @@ class DynamicBackground(BackgroundSubtractor):
 
     def compute_background(self):
         frames = np.asarray(self.frame_collection).transpose((1,2,0))
-        self.background = self.background_algortihm(frames)
+        self.background = self.background_algorithm(frames)
 
     def subtract_background(self, image: NDArray) -> NDArray: 
         if self.curr_image % self.sample_every_n_frames == 0:
@@ -497,7 +500,7 @@ class DynamicBackgroundMP(BackgroundSubtractor):
         while not stop_flag.is_set():
             data = image_store.get_data().transpose((1,2,0))
             if data is not None:
-                bckg_img = self.background_algortihm(data)
+                bckg_img = self.background_algorithm(data)
                 background[:] = bckg_img.flatten()
 
     def get_background(self) -> NDArray:
