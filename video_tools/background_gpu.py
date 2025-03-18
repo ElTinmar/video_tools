@@ -160,12 +160,12 @@ class BackroundImage(BackgroundSubtractor):
         else:
             raise ValueError(f'{self.image_file_name} image type unknown')
     
-
+        self.background = im2single(im2gray(image)) 
+        
         if self.use_gpu:
             self.background_gpu = cp.asarray(self.background)
             self.image_single_gpu = cp.zeros_like(self.background)
         else:
-            self.background = im2single(im2gray(image)) 
             self.image_single = np.zeros_like(self.background)
         
         self.initialized = True
