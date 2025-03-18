@@ -180,7 +180,7 @@ class BackroundImage(BackgroundSubtractor):
 
         if self.use_gpu:
             image_gpu = cp.asarray(image)
-            im2single_GPU(im2gray_GPU(image_gpu), self.image_single_gpu)
+            self.image_single_gpu = im2single_GPU(im2gray_GPU(image_gpu))
             cp.subtract(self.image_single_gpu, self.background_gpu, out=self.image_single_gpu)
             cp.multiply(self.image_single_gpu, self.polarity.value, out=self.image_single_gpu) 
             cp.maximum(self.image_single_gpu, 0, out=self.image_single_gpu)

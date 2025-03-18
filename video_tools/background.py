@@ -169,7 +169,7 @@ class BackroundImage(BackgroundSubtractor):
             return None
 
     def subtract_background(self, image: NDArray) -> NDArray:
-        im2single(im2gray(image), out=self.image_single)
+        self.image_single = im2single(im2gray(image))
         np.subtract(self.image_single, self.background, out=self.image_single)
         np.multiply(self.image_single, self.polarity.value, out=self.image_single) 
         np.maximum(self.image_single, 0, out=self.image_single)
