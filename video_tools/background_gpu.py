@@ -160,13 +160,9 @@ class BackroundImage(BackgroundSubtractor):
         else:
             raise ValueError(f'{self.image_file_name} image type unknown')
     
-        self.background = im2single(im2gray(image)) 
-        
+        self.background = im2single(im2gray(image))  
         if self.use_gpu:
             self.background_gpu = cp.asarray(self.background)
-            self.image_single_gpu = cp.zeros_like(self.background)
-        else:
-            self.image_single = np.zeros_like(self.background)
         
         self.initialized = True
     
@@ -180,19 +176,19 @@ class BackroundImage(BackgroundSubtractor):
 
         if self.use_gpu:
             image_gpu = cp.asarray(image)
-            self.image_single_gpu = im2single_GPU(im2gray_GPU(image_gpu))
-            cp.subtract(self.image_single_gpu, self.background_gpu, out=self.image_single_gpu)
-            cp.multiply(self.image_single_gpu, self.polarity.value, out=self.image_single_gpu) 
-            cp.maximum(self.image_single_gpu, 0, out=self.image_single_gpu)
-            image_sub = self.image_single_gpu.get()
+            image_single_gpu = im2single_GPU(im2gray_GPU(image_gpu))
+            cp.subtract(image_single_gpu, self.background_gpu, out=image_single_gpu)
+            cp.multiply(image_single_gpu, self.polarity.value, out=image_single_gpu) 
+            cp.maximum(image_single_gpu, 0, out=image_single_gpu)
+            image_sub = image_single_gpu.get()
             return image_sub
         
         else:
-            self.image_single = im2single(im2gray(image))
-            np.subtract(self.image_single, self.background, out=self.image_single)
-            np.multiply(self.image_single, self.polarity.value, out=self.image_single) 
-            np.maximum(self.image_single, 0, out=self.image_single)
-            return self.image_single
+            image_single = im2single(im2gray(image))
+            np.subtract(image_single, self.background, out=image_single)
+            np.multiply(image_single, self.polarity.value, out=image_single) 
+            np.maximum(image_single, 0, out=image_single)
+            return image_single
         
 
 class InpaintBackground(BackgroundSubtractor):
