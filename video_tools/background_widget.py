@@ -3,7 +3,7 @@
 from PyQt5.QtCore import QTimer, pyqtSignal
 from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel, QVBoxLayout, QWidget
 from .video_reader import OpenCV_VideoReader
-from .background import Polarity, BackgroundSubtractor, InpaintBackground, NoBackgroundSub, BackroundImage, StaticBackground, DynamicBackground, DynamicBackgroundMP
+from .background import Polarity, BackgroundSubtractor, InpaintBackground, NoBackgroundSub, BackgroundImage, StaticBackground, DynamicBackground, DynamicBackgroundMP
 from qt_widgets import (
     LabeledSpinBox, LabeledComboBox, FileOpenLabeledEditButton,
     FileSaveLabeledEditButton, NDarray_to_QPixmap
@@ -234,7 +234,7 @@ class BackgroundSubtractorWidget(QWidget):
         if method == 1:
             filepath = self.image_filename.text()
             if os.path.exists(filepath):
-                self.background_subtractor = BackroundImage(
+                self.background_subtractor = BackgroundImage(
                     image_file_name = filepath,
                     polarity = polarity
                 )

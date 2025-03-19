@@ -1,6 +1,6 @@
 from video_tools import (
     InMemory_OpenCV_VideoReader, Polarity,
-    NoBackgroundSub, BackroundImage, InpaintBackground, 
+    NoBackgroundSub, BackgroundImage, InpaintBackground, 
     StaticBackground, DynamicBackground, DynamicBackgroundMP
 )
 from image_tools import im2single, im2single_GPU, im2gray
@@ -29,7 +29,7 @@ video_reader.open_file(
 num_frames = video_reader.get_number_of_frame()
 
 # background subtraction
-background_sub = BackroundImage(
+background_sub = BackgroundImage(
     polarity = POLARITY,
     image_file_name = BACKGROUND_IMAGE,
     use_gpu=False
