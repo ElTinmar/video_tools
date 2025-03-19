@@ -159,6 +159,7 @@ class BackroundImage(BackgroundSubtractor):
             raise ValueError(f'{self.image_file_name} image type unknown')
         
         self.background = im2single(im2gray(image))     
+        self.image_single = np.empty_like(self.background, dtype=np.float32)
         self.initialized = True
     
     def get_background_image(self) -> Optional[NDArray]:
@@ -168,11 +169,11 @@ class BackroundImage(BackgroundSubtractor):
             return None
 
     def subtract_background(self, image: NDArray) -> NDArray:
-        image_single = im2single(im2gray(image))
-        np.subtract(image_single, self.background, out=image_single)
-        np.multiply(image_single, self.polarity.value, out=image_single) 
-        np.maximum(image_single, 0, out=image_single)
-        return image_single
+        self.image_single = im2single(im2gray(image))
+        np.subtract(self.image_single, self.background, out=self.image_single)
+        np.multiply(self.image_single, self.polarity.value, out=self.image_single) 
+        np.maximum(self.image_single, 0, out=self.image_single)
+        return self.image_single
 
 class InpaintBackground(BackgroundSubtractor):
     
