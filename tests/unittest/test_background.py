@@ -1,16 +1,17 @@
 import numpy as np
 import pytest
 from video_tools import BackgroundImage
+import os
 
 @pytest.fixture
 def background_subtractor():
-    """Fixture to initialize a BackgroundImage object."""
     bg_image = np.random.randint(0, 255, (3, 3), dtype=np.uint8)
-    np.save("test_bg.npy", bg_image)  # Save a test background image
+    filename = "test_bg.npy"
+    np.save(filename, bg_image)
     subtractor = BackgroundImage("test_bg.npy")
     subtractor.initialize()
-    return subtractor
-
+    yield subtractor  
+    os.remove(filename)
 
 def test_subtract_background(background_subtractor):
     """Test that subtract_background produces expected output."""

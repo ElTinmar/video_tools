@@ -174,14 +174,6 @@ class BackgroundImage(BackgroundSubtractor):
         np.multiply(self.image_single, self.polarity.value, out=self.image_single) 
         np.maximum(self.image_single, 0, out=self.image_single)
         return self.image_single
-
-    def subtract_background2(self, image: NDArray) -> NDArray:
-        #self.image_single = im2single(im2gray(image))
-        np.subtract(image, self.background, out=self.image_single)
-        np.multiply(self.image_single, self.polarity.value, out=self.image_single) 
-        np.maximum(self.image_single, 0, out=self.image_single)
-        return self.image_single
-
     
 class InpaintBackground(BackgroundSubtractor):
     
