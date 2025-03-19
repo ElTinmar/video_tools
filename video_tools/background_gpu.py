@@ -142,7 +142,7 @@ class NoBackgroundSub(BackgroundSubtractor):
         return im2single(im2gray(image)) 
 
 
-class BackroundImage(BackgroundSubtractor):
+class BackgroundImage(BackgroundSubtractor):
     def __init__(self, image_file_name, use_gpu: bool = False, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.image_file_name = image_file_name
