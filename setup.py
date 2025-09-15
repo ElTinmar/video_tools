@@ -17,6 +17,7 @@ setup(
         "qt_widgets @ git+https://github.com/ElTinmar/qt_widgets.git@main",
         "image_tools @ git+https://github.com/ElTinmar/image_tools.git@main",
         "tqdm",
+        "ffmpeg"
     ],
     extras_require={
         'gpu': ["cupy==12.3.0"]
