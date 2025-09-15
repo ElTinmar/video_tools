@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='video_tools',
-    python_requires='>=3.8',
+    python_requires='>=3.7',
     author='Martin Privat',
     version='0.4.28',
     packages=['video_tools','video_tools.tests'],
