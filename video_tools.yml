@@ -10,6 +10,7 @@ dependencies:
 - scipy
 - tqdm
 - pip
+- ffmpeg
 - pip:
   - git+https://github.com/ElTinmar/qt_widgets.git@main
   - git+https://github.com/ElTinmar/image_tools.git@main
