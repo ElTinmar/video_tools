@@ -2,7 +2,7 @@ name: video_tools
 channels:
 - conda-forge
 dependencies:
-- python == 3.8.16
+- python >= 3.7
 - ipython
 - pyqt
 - numpy
