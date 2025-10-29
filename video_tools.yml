@@ -6,8 +6,7 @@ dependencies:
 - ipython
 - pyqt
 - numpy
-- opencv
-- scipy
+- opencv-headless
 - tqdm
 - pip
 - ffmpeg

@@ -235,25 +235,6 @@ class OpenCV_VideoReader(VideoReader):
 
         return frames
 
-    def play(self) -> None:
-        """
-        TODO
-        """
-
-        print("press q. to stop")
-        cv2.namedWindow(self._filename)
-        
-        while True:
-            rval, frame = self.next_frame()
-            if not rval:
-                break
-            cv2.imshow(self._filename,frame)
-            key = cv2.waitKey(1)
-            if key == ord('q'):
-                break
-
-        cv2.destroyAllWindows()
-
     def get_width_max(self) -> int:
         return self._video_info['width']
 
