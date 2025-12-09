@@ -4,6 +4,12 @@ import subprocess
 import numpy as np
 from abc import ABC
 
+# TODO check 
+# campy: https://github.com/ksseverson57/campy
+# imageio: https://github.com/imageio/imageio-ffmpeg
+# PyAV: https://github.com/PyAV-Org/PyAV
+
+
 # TODO maybe add a multiprocessing queue
 
 class VideoWriter(ABC):
