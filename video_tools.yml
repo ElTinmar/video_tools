@@ -2,9 +2,8 @@ name: video_tools
 channels:
 - conda-forge
 dependencies:
-- python >= 3.7
+- python >= 3.8, < 3.14
 - ipython
-- pyqt
 - numpy
 - opencv-headless
 - tqdm
