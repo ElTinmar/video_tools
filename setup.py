@@ -12,7 +12,7 @@ setup(
     install_requires=[
         "numpy", 
         "opencv-python-headless",
-        "image_tools @ git+https://github.com/ElTinmar/image_tools.git@main",
+        "image_tools @ git+https://github.com/ElTinmar/image_tools.git@v0.9.2",
         "tqdm"
     ]
 )
