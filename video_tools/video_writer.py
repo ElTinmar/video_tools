@@ -3,6 +3,8 @@ from numpy.typing import NDArray
 import subprocess
 import numpy as np
 from abc import ABC
+from pathlib import Path
+from types import TracebackType
 
 # TODO check 
 # campy: https://github.com/ksseverson57/campy
@@ -19,6 +21,12 @@ class VideoWriter(ABC):
     def close(self) -> None:
         pass
 
+    def __enter__(self) -> "VideoWriter":
+        return self
+
+    def __exit__(self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: TracebackType | None) -> None:
+        self.close()
+
 # video writer opencv
 class OpenCV_VideoWriter(VideoWriter):
 
@@ -27,14 +35,15 @@ class OpenCV_VideoWriter(VideoWriter):
             height: int, 
             width: int, 
             fps: int = 25, 
-            filename: str = 'output.avi',
+            filename: str | Path = Path('output.avi'),
             fourcc: str = 'XVID'
         ) -> None:
         
         self.height = height
         self.width = width
         self.fps = fps
-        self.filename = filename
+        self.filename = Path(filename)
+        self.filename.parent.mkdir(parents=True, exist_ok=True)
         self.fourcc = cv2.VideoWriter_fourcc(*fourcc)
         color = True
         self.writer = cv2.VideoWriter(filename, self.fourcc, fps, (width, height), color)
@@ -66,11 +75,14 @@ class FFMPEG_VideoWriter_GPU(VideoWriter):
             width: int, 
             fps: int = 25, 
             q: int = 23,
-            filename: str = 'output.mp4',
+            filename: str | Path = Path('output.mp4'),
             codec: str = 'h264_nvenc',
             profile: str = 'main',
             preset: str = 'p2'
         ) -> None:
+
+        filename = Path(filename)
+        filename.parent.mkdir(parents=True, exist_ok=True)
 
         if not codec in self.SUPPORTED_VIDEO_CODECS:
             raise ValueError(f'wrong video_codec type, supported codecs are: {self.SUPPORTED_VIDEO_CODECS}') 
@@ -148,11 +160,14 @@ class FFMPEG_VideoWriter_CPU(VideoWriter):
             width: int, 
             fps: int = 25, 
             q: int = 23,
-            filename: str = 'output.mp4',
+            filename: str | Path = Path('output.mp4'),
             codec: str = 'h264',
             profile: str = 'main',
             preset: str = 'veryfast'
         ) -> None:
+
+        filename = Path(filename)
+        filename.parent.mkdir(parents=True, exist_ok=True)
 
         if not codec in self.SUPPORTED_VIDEO_CODECS:
             raise ValueError(f'wrong codec, supported codecs are: {self.SUPPORTED_VIDEO_CODECS}') 
